@@ -401,7 +401,7 @@
       <x>360</x>
       <y>340</y>
       <width>1111</width>
-      <height>521</height>
+      <height>551</height>
      </rect>
     </property>
    </widget>
@@ -418,13 +418,13 @@
      <string>Display SET</string>
     </property>
    </widget>
-   <widget class="QTreeWidget" name="treeWidget">
+   <widget class="QTreeWidget" name="tree_devices">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>100</y>
       <width>341</width>
-      <height>761</height>
+      <height>791</height>
      </rect>
     </property>
     <column>
