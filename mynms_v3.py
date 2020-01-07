@@ -8,6 +8,8 @@ from sys import argv
 from PyQt5.Qt import QTableWidgetItem, QWidget
 import MySQLdb
 import cisco
+from Connectivity import Connectivity
+from GetSNMP import GetSNMP
 
 ui,_ = loadUiType('mynms_v3.ui')
 
@@ -35,6 +37,7 @@ class MainWindow(QMainWindow, ui):
         self.combo_commands.activated.connect(self.update_edit_command)
         self.btn_display_set.clicked.connect(self.show_display_set)
         self.btn_exit.clicked.connect(self.close_application)
+        self.btn_add_network.clicked.connect(self.save_display_new_devices)
         
     def close_application(self):
         self.close()
@@ -53,12 +56,59 @@ class MainWindow(QMainWindow, ui):
     
     def populate_devices_tree(self):
         devices = self.get_mysql_devices()
+        QTreeWidget.clear()
         parent = QTreeWidgetItem(self.tree_devices)
         parent.setText(0, "Devices")
         
         for item in devices:
             child = QTreeWidgetItem(parent)
             child.setText(0, item)
+    
+    def get_subnet(self):
+        net_address = ''
+        block = 0
+        adder = 0
+        network = self.edit_new_network.text()
+        network = network.split('/')
+        subnet_list = network[0].split('.')
+        network_bits = int(network[1])
+        bit_values = [128,64,32,16,8,4,2,1]      
+        
+        if network_bits == 24:
+            net_address = subnet_list[0]+'.'+subnet_list[1]+'.'+subnet_list[2]+'.0'
+            block = 255
+        elif network_bits < 32:            
+            for num in range(network_bits-24):
+                adder += bit_values[num]
+            block = 256-adder
+            net_address = subnet_list[0]+'.'+subnet_list[1]+'.'+subnet_list[2]+'.'+ str(int(int(subnet_list[3])/block)*block)
+        return (net_address, block)
+    
+    def discovery_devices(self, net_address, block):
+        conn = Connectivity()
+        live_hosts = []
+        subnet_4_octets = net_address.split('.')
+        subnet_3_octets = subnet_4_octets[0] +'.' + subnet_4_octets[1] +'.'+ subnet_4_octets[2]
+        
+        for host in range(block-1):
+            ip = subnet_3_octets + '.' + str(int(subnet_4_octets[3])+host)
+            print(f"test ip: {ip}")
+            if conn.check_connectivity(ip):
+                live_hosts.append(ip)
+        
+        return live_hosts
+    
+    def save_display_new_devices(self):
+        net_add, block = self.get_subnet()
+        devices = self.discovery_devices(net_add, block)
+        hostnames = []
+        conn = MySQLdb.connect(host="localhost", user="root", password="noway1", db="mynms")
+        cur = conn.cursor()
+        for ip in devices:
+            hostname = GetSNMP.get_hostname(ip, self.edit_snmp_community.text())
+            cur.execute(''' INSERT INTO devices(ip_add, hostname), VALUES(%s, %s) ''', (ip, hostname)) 
+        conn.close()
+        self.populate_devices_tree()        
     
     
     def populate_protocol_combo(self):
