@@ -41,6 +41,17 @@ class MainWindow(QMainWindow, ui):
         
     def close_application(self):
         self.close()
+        
+    ####
+    
+    def validate_subnet(self):
+        if self.edit_new_network.text() == "":
+            self.edit_new_network.setText("Network can't be empty!")
+            return False
+        if self.edit_snmp_community.text() == "":
+            self.edit_snmp_community.setText("Community can't be empty!")
+            return False
+        return True
     
     ## Populate controls on initialization
     
@@ -99,16 +110,18 @@ class MainWindow(QMainWindow, ui):
         return live_hosts
     
     def save_display_new_devices(self):
-        net_add, block = self.get_subnet()
-        devices = self.discovery_devices(net_add, block)
-        hostnames = []
-        conn = MySQLdb.connect(host="localhost", user="root", password="noway1", db="mynms")
-        cur = conn.cursor()
-        for ip in devices:
-            hostname = GetSNMP.get_hostname(ip, self.edit_snmp_community.text())
-            cur.execute(''' INSERT IGNORE INTO devices(ip_add, hostname) VALUES(%s, %s) ''', (ip, hostname))
-        conn.commit() 
-        self.populate_devices_tree()        
+        
+        if self.validate_subnet():            
+            net_add, block = self.get_subnet()
+            devices = self.discovery_devices(net_add, block)
+            hostnames = []
+            conn = MySQLdb.connect(host="localhost", user="root", password="noway1", db="mynms")
+            cur = conn.cursor()
+            for ip in devices:
+                hostname = GetSNMP.get_hostname(ip, self.edit_snmp_community.text())
+                cur.execute(''' INSERT IGNORE INTO devices(ip_add, hostname) VALUES(%s, %s) ''', (ip, hostname))
+            conn.commit() 
+            self.populate_devices_tree()        
 
     
     def populate_protocol_combo(self):
