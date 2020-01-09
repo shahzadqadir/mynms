@@ -56,7 +56,7 @@ class MainWindow(QMainWindow, ui):
     
     def populate_devices_tree(self):
         devices = self.get_mysql_devices()
-        QTreeWidget.clear()
+        #QTreeWidget.clear()
         parent = QTreeWidgetItem(self.tree_devices)
         parent.setText(0, "Devices")
         
@@ -106,10 +106,10 @@ class MainWindow(QMainWindow, ui):
         cur = conn.cursor()
         for ip in devices:
             hostname = GetSNMP.get_hostname(ip, self.edit_snmp_community.text())
-            cur.execute(''' INSERT INTO devices(ip_add, hostname), VALUES(%s, %s) ''', (ip, hostname)) 
-        conn.close()
+            cur.execute(''' INSERT IGNORE INTO devices(ip_add, hostname) VALUES(%s, %s) ''', (ip, hostname))
+        conn.commit() 
         self.populate_devices_tree()        
-    
+
     
     def populate_protocol_combo(self):
         protocols = ["Telnet", "SSH"]
