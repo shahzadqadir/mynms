@@ -10,6 +10,7 @@ import MySQLdb
 import cisco
 from Connectivity import Connectivity
 from GetSNMP import GetSNMP
+from ipv4_check import IPv4Check
 
 ui,_ = loadUiType('mynms_v3.ui')
 
@@ -48,9 +49,19 @@ class MainWindow(QMainWindow, ui):
         if self.edit_new_network.text() == "":
             self.edit_new_network.setText("Network can't be empty!")
             return False
+        else:
+            if not IPv4Check.check_ip_format(self.edit_new_network.text()):
+                self.edit_new_network.setText("Invalid IP Address")
+                return False
+            else:
+                if not IPv4Check.check_valid_ip(self.edit_new_network.text()):
+                    self.edit_new_network.setText("Invalid IP Address")
+                    return False
+                
         if self.edit_snmp_community.text() == "":
             self.edit_snmp_community.setText("Community can't be empty!")
             return False
+        
         return True
     
     ## Populate controls on initialization
@@ -67,7 +78,7 @@ class MainWindow(QMainWindow, ui):
     
     def populate_devices_tree(self):
         devices = self.get_mysql_devices()
-        #QTreeWidget.clear()
+        self.tree_devices.clear()
         parent = QTreeWidgetItem(self.tree_devices)
         parent.setText(0, "Devices")
         
@@ -93,19 +104,30 @@ class MainWindow(QMainWindow, ui):
                 adder += bit_values[num]
             block = 256-adder
             net_address = subnet_list[0]+'.'+subnet_list[1]+'.'+subnet_list[2]+'.'+ str(int(int(subnet_list[3])/block)*block)
+        elif network_bits == 32:
+            net_address = network[0]
+            block = 1
         return (net_address, block)
     
     def discovery_devices(self, net_address, block):
         conn = Connectivity()
         live_hosts = []
-        subnet_4_octets = net_address.split('.')
-        subnet_3_octets = subnet_4_octets[0] +'.' + subnet_4_octets[1] +'.'+ subnet_4_octets[2]
         
-        for host in range(block-1):
-            ip = subnet_3_octets + '.' + str(int(subnet_4_octets[3])+host)
-            print(f"test ip: {ip}")
-            if conn.check_connectivity(ip):
-                live_hosts.append(ip)
+        if block == 1:
+            if conn.check_connectivity(net_address):
+                live_hosts.append(net_address)
+                print(f"{net_address} found and added")
+            else:
+                print(f"{net_address} not reachable")
+        else:        
+            subnet_4_octets = net_address.split('.')
+            subnet_3_octets = subnet_4_octets[0] +'.' + subnet_4_octets[1] +'.'+ subnet_4_octets[2]
+            
+            for host in range(block-1):
+                ip = subnet_3_octets + '.' + str(int(subnet_4_octets[3])+host)
+                print(f"test ip: {ip}")
+                if conn.check_connectivity(ip):
+                    live_hosts.append(ip)
         
         return live_hosts
     

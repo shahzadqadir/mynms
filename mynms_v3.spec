@@ -3,11 +3,11 @@
 block_cipher = None
 
 
-a = Analysis(['ConfigReview.py'],
-             pathex=['/home/python/projects/my_projects/ConfigReview'],
+a = Analysis(['mynms_v3.py'],
+             pathex=['/home/python/projects/my_projects/mynms'],
              binaries=[],
              datas=[],
-             hiddenimports=[],
+             hiddenimports=['/usr/lib/x86_64-linux-gnu/libpython3.7m.so.1.0'],
              hookspath=[],
              runtime_hooks=[],
              excludes=[],
@@ -23,7 +23,7 @@ exe = EXE(pyz,
           a.zipfiles,
           a.datas,
           [],
-          name='ConfigReview',
+          name='mynms_v3',
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
