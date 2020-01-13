@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 # v2 adds Telnet and fixes some coding practice
 
+import PyQt5
 from PyQt5.uic import loadUiType
 from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox,\
     QTreeWidgetItem
