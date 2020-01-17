@@ -501,7 +501,20 @@
      </rect>
     </property>
     <property name="text">
-     <string>Configure Interfaces</string>
+     <string>Configure Switch Ports</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_config_intf_2">
+    <property name="geometry">
+     <rect>
+      <x>1190</x>
+      <y>440</y>
+      <width>211</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Configure L3 Interfaces</string>
     </property>
    </widget>
   </widget>

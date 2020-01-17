@@ -8,11 +8,12 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox,\
 from sys import argv
 from PyQt5.Qt import QTableWidgetItem, QWidget
 import MySQLdb
+#### My imports
 import cisco
 from Connectivity import Connectivity
 from GetSNMP import GetSNMP
 from ipv4_check import IPv4Check
-from ConfigInterface import IntfConfig
+from ConfigInterface import L2IntfConfig
 
 ui,_ = loadUiType('mynms_v3.ui')
 
@@ -24,6 +25,7 @@ class MainWindow(QMainWindow, ui):
         self.username = ""
         self.password = ""
         self.device_type = ""
+        self.vendor = ""
         self.display_set = False
         self.connection_test = False
         #self.devices_info = {}     
@@ -51,7 +53,7 @@ class MainWindow(QMainWindow, ui):
     
     def open_interface_diag(self):
         self.ip = self.edit_ip_add.text()
-        self.intfDiag = IntfConfig(self.ip, self.username, self.password)
+        self.intfDiag = L2IntfConfig(self.ip, self.username, self.password)
         self.intfDiag.show()
         
     ####

@@ -21,6 +21,18 @@ class GetSNMP:
         session = Session(hostname=ip_add, community=snmp_community, version=2)
         serial_no = session.get('iso.3.6.1.2.1.47.1.1.1.1.11.1')
         return serial_no.value
+    
+    def get_vendor(ip_add, snmp_community):
+        session = Session(hostname=ip_add, community=snmp_community, version=2)
+        vendor = session.get('iso.3.6.1.2.1.1.1.0')        
+        if "isco" in vendor.value:
+            return "Cisco"
+        elif "niper" in vendor.value:
+            return "Juniper"
+
+
+
+
 
 
 
