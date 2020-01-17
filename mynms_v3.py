@@ -12,18 +12,21 @@ import cisco
 from Connectivity import Connectivity
 from GetSNMP import GetSNMP
 from ipv4_check import IPv4Check
+from ConfigInterface import IntfConfig
 
 ui,_ = loadUiType('mynms_v3.ui')
 
 class MainWindow(QMainWindow, ui):
     def __init__(self):
+        self.ip = ""
         self.hostname = ""
         self.protocol = ""
         self.username = ""
         self.password = ""
         self.device_type = ""
         self.display_set = False
-        self.connection_test = False     
+        self.connection_test = False
+        #self.devices_info = {}     
         
         QMainWindow.__init__(self)
         self.setupUi(self)
@@ -32,6 +35,7 @@ class MainWindow(QMainWindow, ui):
         self.button_handler()
         self.populate_commands_combo()
         self.populate_devices_tree()
+        self.tree_devices.itemSelectionChanged.connect(self.get_tree_selection)
     
     def button_handler(self):
         self.btn_connect.clicked.connect(self.pull_device_info)
@@ -40,9 +44,15 @@ class MainWindow(QMainWindow, ui):
         self.btn_display_set.clicked.connect(self.show_display_set)
         self.btn_exit.clicked.connect(self.close_application)
         self.btn_add_network.clicked.connect(self.save_display_new_devices)
+        self.btn_config_intf.clicked.connect(self.open_interface_diag)
         
     def close_application(self):
         self.close()
+    
+    def open_interface_diag(self):
+        self.ip = self.edit_ip_add.text()
+        self.intfDiag = IntfConfig(self.ip, self.username, self.password)
+        self.intfDiag.show()
         
     ####
     
@@ -86,6 +96,22 @@ class MainWindow(QMainWindow, ui):
         for item in devices:
             child = QTreeWidgetItem(parent)
             child.setText(0, item)
+    
+    def get_tree_selection(self):
+        get_selected = self.tree_devices.selectedItems()
+        if get_selected:
+            base_node = get_selected[0]
+            child_node = base_node.text(0)
+            conn = MySQLdb.connect(host="localhost", user="root", password="noway1", db="mynms")
+            cur = conn.cursor()
+            cur.execute('''
+            SELECT ip_add FROM devices WHERE hostname=(%s);
+            ''',(child_node,)
+            )
+            ip_address = cur.fetchall()
+            conn.close()
+            self.edit_ip_add.setText(ip_address[0][0])
+            self.ip = ip_address[0][0]
     
     def get_subnet(self):
         net_address = ''
@@ -142,7 +168,8 @@ class MainWindow(QMainWindow, ui):
             cur = conn.cursor()
             for ip in devices:
                 hostname = GetSNMP.get_hostname(ip, self.edit_snmp_community.text())
-                cur.execute(''' INSERT IGNORE INTO devices(ip_add, hostname) VALUES(%s, %s) ''', (ip, hostname))
+                vendor = GetSNMP.get_vendor(ip, self.edit_snmp_community.text())
+                cur.execute(''' INSERT IGNORE INTO devices(ip_add, hostname, vendor) VALUES(%s, %s, %s) ''', (ip, hostname, vendor))
             conn.commit() 
             self.populate_devices_tree()        
 

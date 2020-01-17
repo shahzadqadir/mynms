@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>755</width>
+    <height>591</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>Serif</family>
+    <pointsize>10</pointsize>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>Configure Interface</string>
+  </property>
+  <widget class="QComboBox" name="cmb_interfaces">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>30</y>
+     <width>351</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>40</y>
+     <width>91</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Sans Serif</family>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Interfaces</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_current_config">
+   <property name="geometry">
+    <rect>
+     <x>510</x>
+     <y>30</y>
+     <width>161</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Show Current Config</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="cmb_speed">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>190</y>
+     <width>101</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Interface Speed</string>
+   </property>
+   <property name="currentText">
+    <string extracomment="Speed"/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>190</y>
+     <width>51</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>OpenSymbol</family>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Speed</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="edit_desc">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>160</y>
+     <width>231</width>
+     <height>25</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>160</y>
+     <width>91</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Sans Serif</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Description:</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="cmb_duplex">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>220</y>
+     <width>141</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Interface Speed</string>
+   </property>
+   <property name="currentText">
+    <string extracomment="Speed"/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>220</y>
+     <width>71</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>OpenSymbol</family>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Duplex</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="cmb_mode">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>160</y>
+     <width>131</width>
+     <height>25</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>420</x>
+     <y>160</y>
+     <width>51</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>OpenSymbol</family>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Mode</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="edit_access_vlan">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>190</y>
+     <width>101</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="placeholderText">
+    <string>Access VLAN</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="edit_trunk_vlans">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>220</y>
+     <width>241</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Comma separated list of Vlans. Use - for range</string>
+   </property>
+   <property name="placeholderText">
+    <string>Allowed Vlans on trunk</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>250</y>
+     <width>92</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Shutdown</string>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>120</y>
+     <width>711</width>
+     <height>201</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Times New Roman</family>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="title">
+    <string/>
+   </property>
+   <widget class="QPushButton" name="btn_build_config">
+    <property name="geometry">
+     <rect>
+      <x>580</x>
+      <y>130</y>
+      <width>121</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Serif</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Build Config</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QLabel" name="label_6">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>110</y>
+     <width>261</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Switch interface configurations</string>
+   </property>
+  </widget>
+  <zorder>groupBox</zorder>
+  <zorder>cmb_interfaces</zorder>
+  <zorder>label</zorder>
+  <zorder>btn_current_config</zorder>
+  <zorder>cmb_speed</zorder>
+  <zorder>label_2</zorder>
+  <zorder>edit_desc</zorder>
+  <zorder>label_3</zorder>
+  <zorder>cmb_duplex</zorder>
+  <zorder>label_4</zorder>
+  <zorder>cmb_mode</zorder>
+  <zorder>label_5</zorder>
+  <zorder>edit_access_vlan</zorder>
+  <zorder>edit_trunk_vlans</zorder>
+  <zorder>checkBox</zorder>
+  <zorder>label_6</zorder>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

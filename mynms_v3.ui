@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1676</width>
-    <height>911</height>
+    <width>1500</width>
+    <height>905</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -400,7 +400,7 @@
      <rect>
       <x>360</x>
       <y>340</y>
-      <width>1111</width>
+      <width>791</width>
       <height>551</height>
      </rect>
     </property>
@@ -472,13 +472,45 @@
      <string>Add</string>
     </property>
    </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>1190</x>
+      <y>360</y>
+      <width>231</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Verdana</family>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Configuration Tasks:</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_config_intf">
+    <property name="geometry">
+     <rect>
+      <x>1190</x>
+      <y>400</y>
+      <width>211</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Configure Interfaces</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1676</width>
+     <width>1500</width>
      <height>22</height>
     </rect>
    </property>

@@ -3,6 +3,7 @@
 import paramiko
 import telnetlib
 import time
+#from builtins import True
 
 def connection_test_ssh(hostname, username, password):
     try:        
@@ -24,6 +25,26 @@ def show_cmd_ssh(hostname, username, password, command):
     stdin, stdout, stderr = conn.exec_command(command)
     stdout = stdout.readlines()
     return stdout
+
+def config_cmd_ssh(hostname, username, password, cmd_list):
+    try:
+        conn = paramiko.SSHClient()
+        conn.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        conn.connect(hostname=hostname, username=username, password=password, allow_agent=False,look_for_keys=False)
+    except paramiko.ssh_exception.AuthenticationException:
+        return False
+    except paramiko.ssh_exception.NoValidConnectionsError:
+        return False
+    
+    rtcon = conn.invoke_shell()
+    time.sleep(1)
+    
+    for command in cmd_list:
+        rtcon.send(command + '\n')
+        time.sleep(1)
+        
+    return True
+
 
 def show_telnet_cisco(host, username, password, command):
     tn = telnetlib.Telnet(host, timeout=3)
@@ -80,6 +101,11 @@ def show_telnet_junos(host, username, password, command):
     output = tn.read_very_eager().decode()
     tn.close()
     return output
+
+# cmd_list = ["terminal length 0", "configure terminal", "interface ethernet1/1", "duplex full","switchport access vlan 10","end"]
+# 
+# if config_cmd_ssh("192.168.10.2", "nms", "cisco", cmd_list):
+#     print("commands implmented successfully!")
 
 # output = show_telnet_cisco("192.168.122.72", "nms", "cisco", "show version | in time")
 # print(output[-3].strip('\n'))
