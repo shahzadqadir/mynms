@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>L3 Interface Configuration</string>
   </property>
   <widget class="QLineEdit" name="edit_ip_address">
    <property name="geometry">
@@ -48,10 +48,10 @@
   <widget class="QGroupBox" name="groupBox_2">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>240</y>
-     <width>381</width>
-     <height>201</height>
+     <x>40</x>
+     <y>210</y>
+     <width>391</width>
+     <height>251</height>
     </rect>
    </property>
    <property name="font">
@@ -62,12 +62,31 @@
    <property name="title">
     <string/>
    </property>
+   <widget class="QCheckBox" name="check_shutdown">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>210</y>
+      <width>101</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Verdana</family>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Shutdown</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QLineEdit" name="edit_ip_helper">
    <property name="geometry">
     <rect>
      <x>160</x>
-     <y>270</y>
+     <y>250</y>
      <width>231</width>
      <height>25</height>
     </rect>
@@ -90,7 +109,7 @@
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>270</y>
+     <y>250</y>
      <width>91</width>
      <height>17</height>
     </rect>
@@ -109,7 +128,7 @@
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>360</y>
+     <y>340</y>
      <width>41</width>
      <height>17</height>
     </rect>
@@ -147,7 +166,7 @@
    <property name="geometry">
     <rect>
      <x>160</x>
-     <y>400</y>
+     <y>380</y>
      <width>231</width>
      <height>25</height>
     </rect>
@@ -170,7 +189,7 @@
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>330</y>
+     <y>310</y>
      <width>91</width>
      <height>17</height>
     </rect>
@@ -189,7 +208,7 @@
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>400</y>
+     <y>380</y>
      <width>91</width>
      <height>17</height>
     </rect>
@@ -227,7 +246,7 @@
    <property name="geometry">
     <rect>
      <x>160</x>
-     <y>360</y>
+     <y>340</y>
      <width>101</width>
      <height>25</height>
     </rect>
@@ -259,7 +278,7 @@
    <property name="geometry">
     <rect>
      <x>160</x>
-     <y>330</y>
+     <y>310</y>
      <width>231</width>
      <height>25</height>
     </rect>
@@ -269,7 +288,7 @@
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>300</y>
+     <y>280</y>
      <width>91</width>
      <height>17</height>
     </rect>
@@ -339,7 +358,7 @@
    <property name="geometry">
     <rect>
      <x>160</x>
-     <y>300</y>
+     <y>280</y>
      <width>231</width>
      <height>25</height>
     </rect>
@@ -387,7 +406,46 @@
     </rect>
    </property>
   </widget>
+  <zorder>groupBox_3</zorder>
+  <zorder>edit_ip_address</zorder>
+  <zorder>btn_close</zorder>
+  <zorder>groupBox_2</zorder>
+  <zorder>edit_ip_helper</zorder>
+  <zorder>lbl_config_status</zorder>
+  <zorder>label_10</zorder>
+  <zorder>label_13</zorder>
+  <zorder>label_8</zorder>
+  <zorder>edit_l3_desc</zorder>
+  <zorder>label_12</zorder>
+  <zorder>label_9</zorder>
+  <zorder>label_14</zorder>
+  <zorder>combo_nat</zorder>
+  <zorder>btn_write_config</zorder>
+  <zorder>edit_acl_out</zorder>
+  <zorder>label_11</zorder>
+  <zorder>label_7</zorder>
+  <zorder>btn_build_config</zorder>
+  <zorder>edit_mask</zorder>
+  <zorder>edit_acl_in</zorder>
+  <zorder>label</zorder>
+  <zorder>btn_current_config</zorder>
+  <zorder>cmb_interfaces</zorder>
  </widget>
+ <tabstops>
+  <tabstop>cmb_interfaces</tabstop>
+  <tabstop>btn_current_config</tabstop>
+  <tabstop>edit_ip_address</tabstop>
+  <tabstop>edit_mask</tabstop>
+  <tabstop>edit_ip_helper</tabstop>
+  <tabstop>edit_acl_in</tabstop>
+  <tabstop>edit_acl_out</tabstop>
+  <tabstop>combo_nat</tabstop>
+  <tabstop>edit_l3_desc</tabstop>
+  <tabstop>check_shutdown</tabstop>
+  <tabstop>btn_build_config</tabstop>
+  <tabstop>btn_write_config</tabstop>
+  <tabstop>btn_close</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
