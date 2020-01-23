@@ -364,6 +364,7 @@
    </property>
   </widget>
   <zorder>groupBox</zorder>
+  <zorder>groupBox_3</zorder>
   <zorder>cmb_interfaces</zorder>
   <zorder>label</zorder>
   <zorder>btn_current_config</zorder>
@@ -377,7 +378,6 @@
   <zorder>btn_build_config</zorder>
   <zorder>btn_close</zorder>
   <zorder>lbl_config_status</zorder>
-  <zorder>groupBox_3</zorder>
   <zorder>btn_write_config</zorder>
  </widget>
  <resources/>

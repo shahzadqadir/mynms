@@ -13,7 +13,7 @@ import cisco
 from Connectivity import Connectivity
 from GetSNMP import GetSNMP
 from ipv4_check import IPv4Check
-from ConfigInterface import L2IntfConfig
+from ConfigInterface import L2IntfConfig, L3IntfConfig, L3IntfConfigJunos
 
 ui,_ = loadUiType('mynms_v3.ui')
 
@@ -47,14 +47,32 @@ class MainWindow(QMainWindow, ui):
         self.btn_exit.clicked.connect(self.close_application)
         self.btn_add_network.clicked.connect(self.save_display_new_devices)
         self.btn_config_intf.clicked.connect(self.open_interface_diag)
+        self.btn_config_intf_2.clicked.connect(self.open_l3_intf_dialog)
         
     def close_application(self):
         self.close()
     
     def open_interface_diag(self):
         self.ip = self.edit_ip_add.text()
-        self.intfDiag = L2IntfConfig(self.ip, self.username, self.password)
-        self.intfDiag.show()
+        #print(self.device_type)
+        if self.device_type.lower() == "junos":
+            msg = QMessageBox()
+            msg.Icon(QMessageBox.Information)
+            msg.setWindowTitle("Feature Info")
+            msg.setText("Only Juniper Layer 3 interfaces are implemented yet!")
+            msg.exec()
+        else:
+            self.intfDiag = L2IntfConfig(self.ip, self.username, self.password)
+            self.intfDiag.show()
+    
+    def open_l3_intf_dialog(self):
+        self.ip = self.edit_ip_add.text()
+        if self.device_type.lower() == "junos":
+            self.intf3diag = L3IntfConfigJunos(self.ip, self.username, self.password)
+            self.intf3diag.show()
+        elif "cisco" in self.device_type.lower():
+            self.intf3diag = L3IntfConfig(self.ip, self.username, self.password)
+            self.intf3diag.show()
         
     ####
     
@@ -107,13 +125,27 @@ class MainWindow(QMainWindow, ui):
             conn = MySQLdb.connect(host="localhost", user="root", password="noway1", db="mynms")
             cur = conn.cursor()
             cur.execute('''
-            SELECT ip_add FROM devices WHERE hostname=(%s);
+            SELECT ip_add, vendor FROM devices WHERE hostname=(%s);
             ''',(child_node,)
             )
-            ip_address = cur.fetchall()
+            device_info = cur.fetchall()
             conn.close()
-            self.edit_ip_add.setText(ip_address[0][0])
-            self.ip = ip_address[0][0]
+            self.edit_ip_add.setText(device_info[0][0])
+            self.ip = device_info[0][0]
+            self.vendor = device_info[0][1]
+
+            
+            if self.vendor is not None:
+                if self.vendor.lower() == "cisco":
+                    self.combo_device_type.setCurrentIndex(0)
+                    self.combo_device_type.setEnabled(False)
+                elif self.vendor.lower() == "juniper":
+                    self.combo_device_type.setCurrentIndex(1)
+                    self.combo_device_type.setEnabled(False)
+            else:
+                self.combo_device_type.setEnabled(True)
+                
+                
     
     def get_subnet(self):
         net_address = ''
