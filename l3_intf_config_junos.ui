@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Configure Interface - Juniper</string>
   </property>
   <widget class="QPushButton" name="btn_current_config">
    <property name="geometry">
@@ -155,7 +155,7 @@
     <string>Unit</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="edit_mask_2">
+  <widget class="QLineEdit" name="edit_unit">
    <property name="geometry">
     <rect>
      <x>430</x>
@@ -274,9 +274,9 @@
   <widget class="QPushButton" name="btn_build_config">
    <property name="geometry">
     <rect>
-     <x>470</x>
+     <x>520</x>
      <y>270</y>
-     <width>181</width>
+     <width>131</width>
      <height>31</height>
     </rect>
    </property>
@@ -290,15 +290,15 @@
     <string>View config, nothing is saved yet!</string>
    </property>
    <property name="text">
-    <string>Preview Configurations</string>
+    <string>show | compare</string>
    </property>
   </widget>
   <widget class="QPushButton" name="btn_write_config">
    <property name="geometry">
     <rect>
-     <x>470</x>
+     <x>520</x>
      <y>310</y>
-     <width>181</width>
+     <width>131</width>
      <height>31</height>
     </rect>
    </property>
@@ -312,7 +312,7 @@
     <string>View config, nothing is saved yet!</string>
    </property>
    <property name="text">
-    <string>Write Configurations</string>
+    <string>commit</string>
    </property>
   </widget>
   <widget class="QPushButton" name="btn_close">
@@ -338,6 +338,21 @@
    </property>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>cmb_interfaces</tabstop>
+  <tabstop>btn_current_config</tabstop>
+  <tabstop>edit_ip_address_2</tabstop>
+  <tabstop>edit_unit</tabstop>
+  <tabstop>edit_ip_address</tabstop>
+  <tabstop>edit_mask</tabstop>
+  <tabstop>edit_l3_desc</tabstop>
+  <tabstop>edit_acl_in</tabstop>
+  <tabstop>edit_acl_out</tabstop>
+  <tabstop>check_shutdown</tabstop>
+  <tabstop>btn_build_config</tabstop>
+  <tabstop>btn_write_config</tabstop>
+  <tabstop>btn_close</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

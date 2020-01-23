@@ -245,12 +245,13 @@ class L3IntfConfigJunos(QWidget, l3intfjunos):
         self.setupUi(self)
         self.populate_intf_combo()
         self.button_handler()
+        self.cmb_interfaces.currentIndexChanged.connect(self.update_intf_textbox)
         
     def button_handler(self):
         self.btn_current_config.clicked.connect(self.show_current_config)
-#         self.btn_build_config.clicked.connect(self.config_preview)
+        self.btn_build_config.clicked.connect(self.config_preview)
         self.btn_close.clicked.connect(self.close_intf_dialog)
-#         self.btn_write_config.clicked.connect(self.write_cisco_config)
+        self.btn_write_config.clicked.connect(self.write_junos_config)
     
     def populate_intf_combo(self):
         self.cmb_interfaces.clear()
@@ -263,7 +264,7 @@ class L3IntfConfigJunos(QWidget, l3intfjunos):
         selection = self.cmb_interfaces.currentText()
         interface = selection.split(' ')[0]
         current_config_list = []
-        command = "show configuration interface " + interface
+        command = "show configuration interfaces " + interface
         int_config = show_cmd_ssh(self.ip, self.username, self.password, command)
         for line in int_config:
             current_config_list.append(line.replace("\r","").strip("\n"))
@@ -274,46 +275,69 @@ class L3IntfConfigJunos(QWidget, l3intfjunos):
         current_config_str = "\n"
         current_config_str = current_config_str.join(current_config)
         #
-        #print(current_config)
+#         print(current_config)
         #
         curr_config_diag = QMessageBox()
         curr_config_diag.setWindowTitle("Current Configuration ...")
         curr_config_diag.setText(current_config_str)
         curr_config_diag.setModal(True)
         curr_config_diag.addButton(QMessageBox.Ok)
-        curr_config_diag.exec()      
+        curr_config_diag.exec()
+    
+    def update_intf_textbox(self):
+        selection = self.cmb_interfaces.currentText()
+        interface = selection.split(' ')[0]
+        self.edit_ip_address_2.setText(interface)
+    
+    def check_input_filters(self, input_filter):
+        output = show_cmd_ssh(self.ip, self.username, self.password, "show configuration firewall | display set")
+        for pointer in output:
+            if input_filter in pointer:
+                return True
+        return False
+    
+    def check_output_filters(self, output_filter):
+        output = show_cmd_ssh(self.ip, self.username, self.password, "show configuration firewall | display set")
+        for pointer in output:
+            if output_filter in pointer:
+                return True
+        return False        
 
             
     def build_config_junos(self):
-        selection = self.cmb_interfaces.currentText()
-        interface = selection.split(' ')[0]
-        config_list = ["terminal length 0", "configure terminal"]
-        config_list.append(f"interface {interface}")
+        config_list = ["configure"]
+#         selection = self.cmb_interfaces.currentText()
+#         interface = selection.split(' ')[0]
+        interface = self.edit_ip_address_2.text().split('.')[0]
+        unit = self.edit_unit.text()
         description = self.edit_l3_desc.text()
-        config_list.append(f"description {description}")
         l3_ip_add = self.edit_ip_address.text()
-        l3_subnet_mask = self.edit_mask.text()
-        config_list.append(f"ip address {l3_ip_add} {l3_subnet_mask}")
-        ip_helper = self.edit_ip_helper.text()
-        config_list.append(f"ip helper {ip_helper}")
-        acl_in = self.edit_acl_in.text()
-        config_list.append(f"access-class {acl_in} in")
-        acl_out = self.edit_acl_out.text()
-        config_list.append(f"access-class {acl_out} out")
-        nat_operation = self.combo_nat.currentText()
-        if nat_operation == "Inside":
-            config_list.append("ip nat inside")
-        elif nat_operation == "Outside":
-            config_list.append("ip nat outside")     
-        if self.check_shutdown.isChecked():
-            config_list.append("shutdown")
-        else:
-            config_list.append("no shutdown")
+        l3_net_bits = self.edit_mask.text()     
+        filter_in = self.edit_acl_in.text()
+        filter_out = self.edit_acl_out.text()  
+
         
+        if interface:
+            if l3_ip_add and l3_net_bits:
+                config_list.append(f"set interface {interface} unit {unit} family inet address {l3_ip_add}/{l3_net_bits}")
+                if filter_in:
+                    config_list.append(f"set interface {interface} unit {unit} family inet filter input {filter_in}")
+                if filter_out:
+                    config_list.append(f"set interface {interface} unit {unit} family inet filter output {filter_out}")
+        
+                if self.check_shutdown.isChecked():
+                    config_list.append(f"set interface {interface} unit {unit} disable")
+                config_list.append("commit")
+            else:
+                    return "Please enter a valid IP and subnet bits"
+        else:
+                return "Please select an interface from the list"         
+
         return config_list
     
     def config_preview(self):
-        configs = self.build_config_cisco()
+        configs = self.build_config_junos()
+#         print(configs)
         config_str = "\n"
         config_str = config_str.join(configs)
         #
@@ -324,17 +348,32 @@ class L3IntfConfigJunos(QWidget, l3intfjunos):
         preview_diag.addButton(QMessageBox.Ok)
         preview_diag.exec()
         
-    def write_cisco_config(self):
-        self.lbl_config_status.setText("WRITING CONFIGS NOW...")
-        sleep(1)
-        cmd_list = self.build_config_cisco()
+    def write_junos_config(self):
+        
+        if not self.check_input_filters(self.edit_acl_in.text()):
+            in_filter_error_diag = QMessageBox()
+            in_filter_error_diag.Icon(QMessageBox.Critical)
+            in_filter_error_diag.setWindowTitle("Error")
+            in_filter_error_diag.setText("Input filter not configured on device, please check")
+            in_filter_error_diag.exec()
+            return False
+        
+        if not self.check_output_filters(self.edit_acl_out.text()):
+            in_filter_error_diag = QMessageBox()
+            in_filter_error_diag.Icon(QMessageBox.Critical)
+            in_filter_error_diag.setWindowTitle("Error")
+            in_filter_error_diag.setText("Output filter not configured on device, please check")
+            in_filter_error_diag.exec()
+            return False
+        
+        cmd_list = self.build_config_junos()
         if config_cmd_ssh(self.ip, self.username, self.password, cmd_list):
             success_diag = QMessageBox()
             success_diag.Icon(QMessageBox.Information)
             success_diag.setWindowTitle("Success")
             success_diag.setText("Configurations done successfully.")
             success_diag.exec()
-            self.lbl_config_status.setText("")
+            #self.lbl_config_status.setText("")
     
     def close_intf_dialog(self):
         self.close() 

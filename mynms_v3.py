@@ -145,9 +145,15 @@ class MainWindow(QMainWindow, ui):
         if block == 1:
             if conn.check_connectivity(net_address):
                 live_hosts.append(net_address)
-                print(f"{net_address} found and added")
+                found_msg = QMessageBox()
+                found_msg.Icon(QMessageBox.Information)
+                found_msg.setWindowTitle("Device Found")
+                found_msg.setText(f"{net_address} found and added")
             else:
-                print(f"{net_address} not reachable")
+                not_found_msg = QMessageBox()
+                not_found_msg.Icon(QMessageBox.Critical)
+                not_found_msg.setWindowTitle("Error")
+                not_found_msg.setText(f"{net_address} not reachable or SNMP community not configured")
         else:        
             subnet_4_octets = net_address.split('.')
             subnet_3_octets = subnet_4_octets[0] +'.' + subnet_4_octets[1] +'.'+ subnet_4_octets[2]
