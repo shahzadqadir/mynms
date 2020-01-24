@@ -48,6 +48,7 @@ class MainWindow(QMainWindow, ui):
         self.btn_add_network.clicked.connect(self.save_display_new_devices)
         self.btn_config_intf.clicked.connect(self.open_interface_diag)
         self.btn_config_intf_2.clicked.connect(self.open_l3_intf_dialog)
+        self.btn_disconnect.clicked.connect(self.device_disconnect)
         
     def close_application(self):
         self.close()
@@ -142,6 +143,7 @@ class MainWindow(QMainWindow, ui):
                 elif self.vendor.lower() == "juniper":
                     self.combo_device_type.setCurrentIndex(1)
                     self.combo_device_type.setEnabled(False)
+                    self.combo_protocol.setCurrentIndex(1)
             else:
                 self.combo_device_type.setEnabled(True)
                 
@@ -222,7 +224,7 @@ class MainWindow(QMainWindow, ui):
         # temparary until Telnet is not implemented
         # when telnet is implemetned, just remove below lines
         
-        self.combo_protocol.setCurrentIndex(0)
+        self.combo_protocol.setCurrentIndex(1)
         self.combo_protocol.setEnabled(True)
     
     def populate_device_type_combo(self):
@@ -261,6 +263,11 @@ class MainWindow(QMainWindow, ui):
             self.btn_connect.setEnabled(False)
             #self.btn_connect.setText("Disconnect")
             self.combo_device_type.setEnabled(False)
+            self.btn_disconnect.setEnabled(True)
+            self.btn_execute_command.setEnabled(True)
+            self.btn_display_set.setEnabled(True)
+            self.btn_config_intf.setEnabled(True)
+            self.btn_config_intf_2.setEnabled(True)
             
             if device_type == "Cisco IOS":
                 
@@ -323,6 +330,22 @@ class MainWindow(QMainWindow, ui):
 
         else:
             self.label.setText("Couldn't connect, Check username/password, connectivity to host")
+            
+    def device_disconnect(self):
+        self.btn_connect.setEnabled(True)
+        self.lbl_hostname.setText("")
+        self.lbl_ios_version.setText("")
+        self.lbl_cpu_utilization.setText("")
+        self.lbl_uptime.setText("")
+        self.edit_username.setEnabled(True)
+        self.edit_password.setEnabled(True)
+        self.ptedit_cmd_output.clear()
+        self.btn_config_intf.setEnabled(False)
+        self.btn_config_intf_2.setEnabled(False)
+        self.btn_execute_command.setEnabled(False)
+        self.btn_display_set.setEnabled(False)
+        self.btn_disconnect.setEnabled(False)
+        self.label.setText("")
     
     def populate_commands_combo(self):
         commands = [

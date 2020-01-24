@@ -187,21 +187,27 @@ class L3IntfConfig(QWidget, l3intf):
         config_list = ["terminal length 0", "configure terminal"]
         config_list.append(f"interface {interface}")
         description = self.edit_l3_desc.text()
-        config_list.append(f"description {description}")
+        if description:
+            config_list.append(f"description {description}")
         l3_ip_add = self.edit_ip_address.text()
         l3_subnet_mask = self.edit_mask.text()
-        config_list.append(f"ip address {l3_ip_add} {l3_subnet_mask}")
+        if l3_ip_add and l3_subnet_mask:
+            config_list.append(f"ip address {l3_ip_add} {l3_subnet_mask}")
         ip_helper = self.edit_ip_helper.text()
-        config_list.append(f"ip helper {ip_helper}")
+        if ip_helper:
+            config_list.append(f"ip helper {ip_helper}")
         acl_in = self.edit_acl_in.text()
-        config_list.append(f"access-class {acl_in} in")
+        if acl_in:
+            config_list.append(f"access-class {acl_in} in")        
         acl_out = self.edit_acl_out.text()
-        config_list.append(f"access-class {acl_out} out")
+        if acl_out:
+            config_list.append(f"access-class {acl_out} out")
         nat_operation = self.combo_nat.currentText()
-        if nat_operation == "Inside":
-            config_list.append("ip nat inside")
-        elif nat_operation == "Outside":
-            config_list.append("ip nat outside")     
+        if nat_operation:
+            if nat_operation == "Inside":
+                config_list.append("ip nat inside")
+            elif nat_operation == "Outside":
+                config_list.append("ip nat outside")     
         if self.check_shutdown.isChecked():
             config_list.append("shutdown")
         else:
@@ -329,9 +335,9 @@ class L3IntfConfigJunos(QWidget, l3intfjunos):
                     config_list.append(f"set interface {interface} unit {unit} disable")
                 config_list.append("commit")
             else:
-                    return "Please enter a valid IP and subnet bits"
+                    return ["Please","Enter","a","valid","ip","address","and","subnet","mask"]
         else:
-                return "Please select an interface from the list"         
+                return ["Please","select", "an", "interface", "from", "the", "list"]         
 
         return config_list
     
@@ -378,16 +384,16 @@ class L3IntfConfigJunos(QWidget, l3intfjunos):
     def close_intf_dialog(self):
         self.close() 
         
-def main():
-    app = QApplication(sys.argv)
-         
-    myapp = L3IntfConfigJunos("192.168.10.31", "nms", "cisco123")
-    myapp.show()
-         
-    app.exec_()
-     
-if __name__ == "__main__":
-    main()
-               
-           
+# def main():
+#     app = QApplication(sys.argv)
+#          
+#     myapp = L3IntfConfigJunos("192.168.10.31", "nms", "cisco123")
+#     myapp.show()
+#          
+#     app.exec_()
+#      
+# if __name__ == "__main__":
+#     main()
+#                
+#            
           
